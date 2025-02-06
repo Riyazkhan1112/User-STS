@@ -7,7 +7,7 @@ export class UserManager {
   async createUser(userData: { name: string; email: string; password: string }) {
     try {
       userData.password = await bcrypt.hash(userData.password, 10);
-
+      var user = "";
       var response = await this.getUserByEmail(userData.email);
       if (response) throw new Error;
 
