@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserManager = void 0;
 const userModel_1 = require("../model/userModel");
-const pgAdmin_1 = require("../Database/pgAdmin");
+const pgAdmin_1 = require("../database/pgAdmin");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 class UserManager {
     createUser(userData) {
