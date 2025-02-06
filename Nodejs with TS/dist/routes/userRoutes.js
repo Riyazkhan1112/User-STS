@@ -17,6 +17,7 @@ const userController_1 = require("../controller/userController");
 const router = express_1.default.Router();
 ``;
 router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () { (0, userController_1.createUser)(req, res); }));
+router.post("/login", userController_1.login);
 router.get("/:email", userController_1.getUserByEmail);
 router.get("/GetAllUsers", userController_1.getAllUsers);
 router.post("/getByUId", userController_1.getUserByUId);

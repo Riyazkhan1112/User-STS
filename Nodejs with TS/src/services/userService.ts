@@ -1,7 +1,9 @@
 
 import { User } from "../model/userModel";
 import { sequelize } from "../database/pgAdmin";
-import bcrypt from "bcryptjs"
+import bcrypt, { hashSync } from "bcryptjs";
+import jwt from "jsonwebtoken";
+
 
 export class UserManager {
   async createUser(userData: { name: string; email: string; password: string }) {
@@ -23,6 +25,30 @@ export class UserManager {
     }
   }
 
+  async login (email : string , password :string)
+  {
+    try {
+      var response = await this.getUserByEmail(email);
+      if(response == null) throw new Error ( "User Not Found") 
+
+      var haspassword = await bcrypt.hash(password,10);
+
+      if(haspassword == response.password)
+      {
+          // generate the Jwt Token ;
+
+          const token = jwt.sign({ id: response.id, email: response.email }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+          return token
+      }
+      else{
+        throw new Error("Invalid Password");
+      
+      }
+
+    } catch (error) {
+      throw new Error;
+    }
+  }
   async getUserByEmail(email: string) {
 
     try {

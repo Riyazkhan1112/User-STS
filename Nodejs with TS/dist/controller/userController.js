@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = exports.getUserByUId = exports.getUserByEmail = exports.createUser = void 0;
+exports.getAllUsers = exports.getUserByUId = exports.getUserByEmail = exports.login = exports.createUser = void 0;
 const userService_1 = require("../services/userService");
 const userManager = new userService_1.UserManager();
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -22,6 +22,17 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.createUser = createUser;
+const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const [email, password] = req.body;
+        const user = yield userManager.login(email, password);
+        res.status(200).json(user);
+    }
+    catch (error) {
+        res.status(500).json({ message: "User Already Exists", error: error });
+    }
+});
+exports.login = login;
 const getUserByEmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield userManager.getUserByEmail(req.params.email);
