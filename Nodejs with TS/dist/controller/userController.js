@@ -9,58 +9,57 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = exports.getUserByUId = exports.getUserByEmail = exports.login = exports.createUser = void 0;
-const userService_1 = require("../services/userService");
-const userManager = new userService_1.UserManager();
-const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const user = yield userManager.createUser(req.body);
-        res.status(200).json(user);
+class UserController {
+    constructor(userInterface) {
+        this.userInterface = userInterface;
+        this.createUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("hi");
+                const user = yield this.userInterface.createUser(req.body);
+                res.status(200).json(user);
+            }
+            catch (error) {
+                res.status(500).json({ message: "User Already Exists", error });
+            }
+        });
+        this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { email, password } = req.body; // Fixed destructuring
+                const user = yield this.userInterface.login(email, password);
+                res.status(200).send(user);
+            }
+            catch (error) {
+                res.status(500).json({ message: "Error logging in", error });
+            }
+        });
+        this.getUserByEmail = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield this.userInterface.getUserByEmail(req.params.email);
+                res.status(200).json(user);
+            }
+            catch (error) {
+                res.status(500).json({ message: "Error retrieving user", error });
+            }
+        });
+        this.getUserByUId = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield this.userInterface.getUserbyUId(req.params.uId); // Fixed parameter case
+                res.status(200).json(user);
+            }
+            catch (error) {
+                res.status(500).json({ message: "Error retrieving user", error });
+            }
+        });
+        this.getAllUsers = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const users = yield this.userInterface.getAllUsers();
+                res.status(200).json(users);
+            }
+            catch (error) {
+                res.status(500).json({ message: "Error retrieving users", error });
+            }
+        });
     }
-    catch (error) {
-        res.status(500).json({ message: "User Already Exists", error: error });
-    }
-});
-exports.createUser = createUser;
-const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const [email, password] = req.body;
-        const user = yield userManager.login(email, password);
-        res.status(200).json(user);
-    }
-    catch (error) {
-        res.status(500).json({ message: "User Already Exists", error: error });
-    }
-});
-exports.login = login;
-const getUserByEmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const user = yield userManager.getUserByEmail(req.params.email);
-        res.status(200).json(user);
-    }
-    catch (error) {
-        res.status(500).json({ message: "Error retrieving user" });
-    }
-});
-exports.getUserByEmail = getUserByEmail;
-const getUserByUId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const user = yield userManager.getUserbyUId(req.params.UId);
-        res.status(200).json(user);
-    }
-    catch (error) {
-        res.status(500).json({ message: "Error retrieving user" });
-    }
-});
-exports.getUserByUId = getUserByUId;
-const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const user = yield userManager.getAllUsers();
-        res.status(200).json(user);
-    }
-    catch (error) {
-        res.status(500).json({ message: "Error retrieving user" });
-    }
-});
-exports.getAllUsers = getAllUsers;
+}
+exports.default = UserController;
 //# sourceMappingURL=userController.js.map

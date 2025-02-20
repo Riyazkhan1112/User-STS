@@ -1,15 +1,26 @@
-import express, { Request, Response } from "express";
-import { createUser, getAllUsers, getUserByEmail, getUserByUId, login } from "../controller/userController";
-const router = express.Router();
-``
-router.post("/register", async (req: Request, res: Response) => { createUser(req, res) });
+import express, { Request, Response, Router } from "express";
+import userController from "../controller/userController";
 
-router.post("/login",login)
-router.get("/:email", getUserByEmail);
+export default class UserRoutes {
+    private readonly router: Router;
+    private readonly userController: userController;
 
-router.get("/GetAllUsers", getAllUsers);
+    constructor(usrController: userController) {
+        this.router = Router();
+        this.initializeRoutes();
+        this.userController = usrController
+    }
 
-router.post("/getByUId", getUserByUId);
+    initializeRoutes() {
+        this.router.post("/register", (req: Request, res: Response) => this.userController.createUser(req, res));
+        this.router.post("/login", (req: Request, res: Response) => this.userController.login(req,res));
+        // this.router.get("/:email", this.userController);
+        // this.router.get("/GetAllUsers", getAllUsers);
+        // this.router.post("/getByUId", getUserByUId);
+    }
 
+    public getRouter(): Router {
+        return this.router;
+    }
+}
 
-export default router;

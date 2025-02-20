@@ -3,10 +3,12 @@ import { User } from "../model/userModel";
 import { sequelize } from "../database/pgAdmin";
 import bcrypt, { hashSync } from "bcryptjs";
 import jwt from "jsonwebtoken";
+import IUserInterface from "../interface/IuserService";
+import { injectable } from "inversify";
 
-
-export class UserManager {
-  async createUser(userData: { name: string; email: string; password: string }) {
+@injectable()
+export class userService implements IUserInterface {
+ public async createUser(userData: { name: string; email: string; password: string }) : Promise<any> {
     try {
       userData.password = await bcrypt.hash(userData.password, 10);
       var user = "";
@@ -15,9 +17,9 @@ export class UserManager {
 
       var userCreationData = await User.create(userData);
 
-      console.log(response);
+      console.log(userCreationData);
 
-      return response
+      return userCreationData
 
     } catch (error) {
 
@@ -25,7 +27,7 @@ export class UserManager {
     }
   }
 
-  async login (email : string , password :string)
+ public async login (email : string , password :string):Promise<any>
   {
     try {
       var response = await this.getUserByEmail(email);
@@ -49,7 +51,7 @@ export class UserManager {
       throw new Error;
     }
   }
-  async getUserByEmail(email: string) {
+  public async getUserByEmail(email: string) : Promise<any> {
 
     try {
       var response = await User.findOne({ where: { email } });
@@ -59,7 +61,7 @@ export class UserManager {
     }
   }
 
-  async getUserbyUId(UId: string) {
+  public async getUserbyUId(UId: string):Promise<any> {
     try {
 
       const [user] = await sequelize.query("SELECT * FROM users WHERE uId = :uId", {
@@ -72,7 +74,7 @@ export class UserManager {
     }
   }
 
-  async getAllUsers() {
+  async getAllUsers():Promise<any> {
     try {
       // const [users] = await sequelize.query("SELECT * FROM users");
 
