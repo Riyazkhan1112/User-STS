@@ -5,13 +5,15 @@ import bcrypt, { hashSync } from "bcryptjs";
 import jwt from "jsonwebtoken";
 import IUserInterface from "../interface/IuserService";
 import { injectable } from "inversify";
+import { uuid } from "uuidv4";
 
 @injectable()
 export class userService implements IUserInterface {
- public async createUser(userData: { name: string; email: string; password: string }) : Promise<any> {
+  public async createUser(userData:any): Promise<any> {
     try {
+
+
       userData.password = await bcrypt.hash(userData.password, 10);
-      var user = "";
       var response = await this.getUserByEmail(userData.email);
       if (response) throw new Error;
 
@@ -25,33 +27,29 @@ export class userService implements IUserInterface {
 
       throw error;
     }
-  }
+  } 
 
- public async login (email : string , password :string):Promise<any>
-  {
+  public async login(email: string, password: string): Promise<any> {
     try {
       var response = await this.getUserByEmail(email);
-      if(response == null) throw new Error ( "User Not Found") 
+      if (response == null) throw new Error("User Not Found")
 
-      var haspassword = await bcrypt.hash(password,10);
+      var passwordmatched = await bcrypt.compare(password, response.password);
 
-      if(haspassword == response.password)
-      {
-          // generate the Jwt Token ;
-
-          const token = jwt.sign({ id: response.id, email: response.email }, process.env.JWT_SECRET!, { expiresIn: "1h" });
-          return token
+      if (passwordmatched) {
+        const token = jwt.sign({ id: response.id, email: response.email }, "xyz", { expiresIn: "24h" });
+        return token
       }
-      else{
+      else {
         throw new Error("Invalid Password");
-      
+
       }
 
     } catch (error) {
       throw new Error;
     }
   }
-  public async getUserByEmail(email: string) : Promise<any> {
+  public async getUserByEmail(email: string): Promise<any> {
 
     try {
       var response = await User.findOne({ where: { email } });
@@ -61,7 +59,7 @@ export class userService implements IUserInterface {
     }
   }
 
-  public async getUserbyUId(UId: string):Promise<any> {
+  public async getUserbyUId(UId: string): Promise<any> {
     try {
 
       const [user] = await sequelize.query("SELECT * FROM users WHERE uId = :uId", {
@@ -74,7 +72,7 @@ export class userService implements IUserInterface {
     }
   }
 
-  async getAllUsers():Promise<any> {
+  async getAllUsers(): Promise<any> {
     try {
       // const [users] = await sequelize.query("SELECT * FROM users");
 

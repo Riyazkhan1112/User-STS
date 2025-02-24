@@ -3,6 +3,9 @@ import { sequelize } from "../database/pgAdmin";
 
 export class User extends Model {
   public id!: number;
+  public uId!: string;
+  public project!: string;
+  public role!:string;
   public name!: string;
   public email!: string;
   public password!: string;
@@ -27,6 +30,16 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+
+    project: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    
   },
   {
     sequelize,

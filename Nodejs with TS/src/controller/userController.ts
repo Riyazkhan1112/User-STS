@@ -35,7 +35,7 @@ export default class UserController {
   getUserByUId = async (req: Request, res: Response) => {
     try {
       const user = await this.userInterface.getUserbyUId(req.params.uId); // Fixed parameter case
-      res.status(200).json(user);
+      res.status(200).send(user);
     } catch (error) {
       res.status(500).json({ message: "Error retrieving user", error });
     }

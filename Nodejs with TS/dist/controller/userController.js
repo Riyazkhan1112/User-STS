@@ -14,7 +14,6 @@ class UserController {
         this.userInterface = userInterface;
         this.createUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("hi");
                 const user = yield this.userInterface.createUser(req.body);
                 res.status(200).json(user);
             }
@@ -44,7 +43,7 @@ class UserController {
         this.getUserByUId = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = yield this.userInterface.getUserbyUId(req.params.uId); // Fixed parameter case
-                res.status(200).json(user);
+                res.status(200).send(user);
             }
             catch (error) {
                 res.status(500).json({ message: "Error retrieving user", error });

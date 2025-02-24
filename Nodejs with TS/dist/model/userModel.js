@@ -25,6 +25,14 @@ User.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
+    project: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    role: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
 }, {
     sequelize: pgAdmin_1.sequelize,
     tableName: "users",
